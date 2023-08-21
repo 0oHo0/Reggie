@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.duu.reggie.common.R;
 import com.duu.reggie.entity.User;
 import com.duu.reggie.service.UserService;
+import com.duu.reggie.utils.SMSUtils;
 import com.duu.reggie.utils.ValidateCodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -40,7 +41,7 @@ public class UserController {
             log.info("code={}",code);
 
             //调用阿里云提供的短信服务API完成发送短信
-            //SMSUtils.sendMessage("瑞吉外卖","",phone,code);
+            SMSUtils.sendSms(phone,code);
 
             //需要将生成的验证码保存到Session
             session.setAttribute(phone,code);
