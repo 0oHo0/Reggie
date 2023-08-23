@@ -102,4 +102,25 @@ public class ShoppingCartController {
 
         return R.success("清空购物车成功");
     }
+    @PostMapping("/sub")
+    public R<String> sub(@RequestBody ShoppingCart shoppingCart){
+        Long setmealId = shoppingCart.getSetmealId();
+        Long dishId = shoppingCart.getDishId();
+        LambdaQueryWrapper<ShoppingCart> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ShoppingCart::getUserId,BaseContext.getCurrentId());
+        if(setmealId != null){
+            queryWrapper.eq(ShoppingCart::getSetmealId,shoppingCart.getSetmealId());
+        }else{
+            queryWrapper.eq(ShoppingCart::getDishId,shoppingCart.getDishId());
+        }
+        ShoppingCart one = shoppingCartService.getOne(queryWrapper);
+        Integer number=one.getNumber();
+        if(number == 1){
+            shoppingCartService.remove(queryWrapper);
+        }else{
+            one.setNumber(--number);
+            shoppingCartService.updateById(one);
+        }
+        return R.success("减少成功");
+    }
 }
