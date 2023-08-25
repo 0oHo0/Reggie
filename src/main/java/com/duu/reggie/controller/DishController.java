@@ -15,9 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -35,7 +37,8 @@ public class DishController {
 
     @Autowired
     private CategoryService categoryService;
-
+    @Autowired
+    private RedisTemplate redisTemplate;
     /**
      * 新增菜品
      * @param dishDto
@@ -123,12 +126,18 @@ public class DishController {
         log.info(dishDto.toString());
 
         dishService.updateWithFlavor(dishDto);
-
+        String key = "dish_"+dishDto.getCategoryId()+"_1";
+        redisTemplate.delete(key);
         return R.success("新增菜品成功");
     }
     @GetMapping("/list")
     public R<List<DishDto>> list(Dish dish) {
+        List<DishDto> dishDtoList=null;
+        String key="dish_"+dish.getCategoryId()+"_"+dish.getStatus();
         log.info("dish:{}", dish);
+        dishDtoList= (List<DishDto>) redisTemplate.opsForValue().get(key);
+        if(dishDtoList!=null)
+            return R.success(dishDtoList);
         //条件构造器
         LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.like(StringUtils.isNotEmpty(dish.getName()), Dish::getName, dish.getName());
@@ -153,6 +162,7 @@ public class DishController {
             return dishDto;
         }).collect(Collectors.toList());
 
+        redisTemplate.opsForValue().set(key,dishDtos,60, TimeUnit.MINUTES);
         return R.success(dishDtos);
     }
 
@@ -162,6 +172,8 @@ public class DishController {
             Dish dish = dishService.getById(id);
             dish.setStatus(0);
             dishService.updateById(dish);
+            String key = "dish_"+dish.getCategoryId()+"_1";
+            redisTemplate.delete(key);
         }
         return R.success("成功");
     }
@@ -171,6 +183,8 @@ public class DishController {
             Dish dish = dishService.getById(id);
             dish.setStatus(1);
             dishService.updateById(dish);
+            String key = "dish_"+dish.getCategoryId()+"_1";
+            redisTemplate.delete(key);
         }
         return R.success("成功");
     }
