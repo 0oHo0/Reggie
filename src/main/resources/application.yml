@@ -8,12 +8,12 @@ spring:
       names: master,slave
       master:
         type: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://114.115.168.139:3307/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+        url: jdbc:mysql://服务器IP:3307/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
         username: root
         password: dhc00319
       slave:
         type: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://114.115.168.139:3308/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+        url: jdbc:mysql://服务器IP:3308/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
         username: root
         password: dhc00319
     masterslave:
@@ -28,15 +28,8 @@ spring:
       props:
         sql:
           show: true #开启SQL显示，默认false
-    # 从数据源
-#  datasource:
-#    druid:
-#      driver-class-name: com.mysql.cj.jdbc.Driver
-#      url: jdbc:mysql://114.115.168.139:3307/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
-#      username: root
-#      password: dhc00319
   redis:
-    host: 114.115.168.139
+    host: 服务器IP
     port: 6379
     password: 123456
     database: 0
@@ -54,4 +47,4 @@ mybatis-plus:
     db-config:
       id-type: ASSIGN_ID
 reggie:
-  path: D:\IDEA\JAVA Project\resource\
+  path: /home/image/                   #D:\IDEA\JAVA Project\resource\
