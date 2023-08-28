@@ -14,6 +14,8 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,9 +45,9 @@ public class SetmealController {
      * @return
      */
     @PostMapping
+    @CacheEvict(value = "setmealCache",key = "#setmealDto.categoryId+'_'+#setmealDto.status")
     public R<String> save(@RequestBody SetmealDto setmealDto){
         log.info("套餐信息：{}",setmealDto);
-
         setmealService.saveWithDish(setmealDto);
 
         return R.success("新增套餐成功");
@@ -102,6 +104,7 @@ public class SetmealController {
      * @return
      */
     @DeleteMapping
+    @CacheEvict(value = "setmealCache",allEntries = true)
     public R<String> delete(@RequestParam List<Long> ids){
         log.info("ids:{}",ids);
 
@@ -111,6 +114,7 @@ public class SetmealController {
     }
 
     @GetMapping("/list")
+    @Cacheable(value = "setmealCache",key = "#setmeal.categoryId+'_'+#setmeal.status")
     public R<List<Setmeal>> list(Setmeal setmeal) {
         log.info("setmeal:{}", setmeal);
         //条件构造器
@@ -143,6 +147,7 @@ public class SetmealController {
      * @return
      */
     @PutMapping
+    @CacheEvict(value = "setmealCache",key = "#setmealDto.categoryId+'_'+#setmealDto.status")
     public R<String> update(@RequestBody SetmealDto setmealDto){
         log.info(setmealDto.toString());
 
@@ -151,6 +156,7 @@ public class SetmealController {
         return R.success("修改菜品成功");
     }
     @PostMapping("/status/0")
+    @CacheEvict(value = "setmealCache",allEntries = true)
     public R<String> update1(@RequestParam List<Long> ids){
         for(Long id : ids){
             Setmeal setmeal = setmealService.getById(id);
@@ -160,6 +166,7 @@ public class SetmealController {
         return R.success("成功");
     }
     @PostMapping("/status/1")
+    @CacheEvict(value = "setmealCache",allEntries = true)
     public R<String> update0(@RequestParam List<Long> ids){
         for(Long id : ids){
             Setmeal setmeal = setmealService.getById(id);
