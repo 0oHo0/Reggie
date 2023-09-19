@@ -28,8 +28,8 @@
 - 修改`application.yml`中关于Mysql与Redis配置
 - 前后端分离使用docker部署在云服务器
 - 使用nginx放置静态资源与实现反向代理
-  - 后台系统：<http://114.115.168.139/backend/index.html> (账户：admin 密码：123456)
-  - 用户端：<http://114.115.168.139:81/front/index.html>
+  - 后台系统：~~<http:///backend/index.html> (账户：admin 密码：123456)~~
+  - 用户端：~~<http:///front/index.html>~~
   
 ### 后续待改进
 
@@ -37,4 +37,5 @@
 - 用户登录增添QQ/Vx登录功能
 - 支付功能调用支付宝
 ---
-2023.9.4
+服务器被攻击重装系统了  懒得重新部署了  
+2023.9.19
